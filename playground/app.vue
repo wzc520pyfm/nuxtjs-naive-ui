@@ -5,5 +5,4 @@
 </template>
 
 <script setup lang="ts">
-import { NButton, NConfigProvider } from 'naive-ui'
 </script>

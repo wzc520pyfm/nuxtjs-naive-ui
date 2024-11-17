@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@css-render/vue3-ssr": "^0.15.14",
-    "@nuxt/kit": "^3.11.2"
+    "@nuxt/kit": "^3.11.2",
+    "naive-ui": "^2.40.1"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.1.5",
