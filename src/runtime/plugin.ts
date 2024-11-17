@@ -1,18 +1,23 @@
 import { setup } from '@css-render/vue3-ssr'
 import { defineNuxtPlugin } from '#app'
+import { useServerHead } from '#imports'
 
 export default defineNuxtPlugin((_nuxtApp) => {
   if (import.meta.server) {
     const { collect } = setup(_nuxtApp.vueApp)
-    _nuxtApp.hooks.hook('app:rendered', () => {
-      if (_nuxtApp.ssrContext) {
-        if (typeof _nuxtApp.ssrContext.styles === 'string') {
-          _nuxtApp.ssrContext.styles += collect()
-        }
-        else if (!_nuxtApp.ssrContext.styles) {
-          _nuxtApp.ssrContext.styles = collect()
-        }
-      }
+    useServerHead({
+      style: () => {
+        const stylesString = collect()
+        const stylesArray = stylesString.split(/<\/style>/g).filter(style => style)
+        return stylesArray.map((styleString: string) => {
+          const match = styleString.match(/<style cssr-id="([^"]*)">([\s\S]*)/)
+          if (match) {
+            const id = match[1]
+            return { 'cssr-id': id, 'children': match[2] }
+          }
+          return {}
+        })
+      },
     })
   }
 })
